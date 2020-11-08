@@ -1,17 +1,18 @@
 # Script to run main pgls models
 
 # Load packages -----------------------------------------------------------
-library(tidyverse)
-library(sensiPhy)
-library(phylolm)
-library(patchwork)
-library(broom)
-library(writexl)
-library(ggtext)
-library(ggExtra)
+library(tidyverse) # CRAN v1.3.0
+library(sensiPhy)  # [github::paternogbc/sensiPhy] v0.8.5
+library(phylolm)   # CRAN v2.6.2
+library(patchwork) # CRAN v1.0.1
+library(broom)     # CRAN v0.7.0
+library(writexl)   # CRAN v1.3
+library(ggtext)    # [github::wilkelab/ggtext] v0.1.0.9000
+library(ggExtra)   # CRAN v0.9
 
 # source local functions--------------------------------------------------------
 source("R/zzz_functions.R")
+set.seed(1234522)
 
 # Load data ---------------------------------------------------------------
 d <- read.csv("data/processed/full_data.csv")
@@ -37,7 +38,7 @@ mv1 <- phylolm(maleness ~ log2(nspe+1) + sla_imp,
                data = dveg$data, phy = dveg$phy, 
                model = "lambda", boot = 1000)
 summary(mv1)
-
+sjPlot::tab_model(mv1)
 writexl::write_xlsx(x = tidy(mv1), path = "output/supp/supp_tab_controlled_pgls_sla.xls")
 
 # sla-----------------------------------------------------------------------
@@ -81,6 +82,7 @@ mf3 <- phylolm(maleness ~ log2(nspe+1) + polli,
                data = dpol$data, phy = dpol$phy, 
                model = "lambda", boot = 1000)
 summary(mf3)
+
 writexl::write_xlsx(x = tidy(mf3), path = "output/supp/supp_tab_controlled_pgls_polli.xls")
 
 # color-------------------------------------------------------------------------

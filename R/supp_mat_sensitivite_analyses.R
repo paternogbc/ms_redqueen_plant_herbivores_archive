@@ -276,6 +276,9 @@ psize = 3
 mod <- lm(log2(nspe+1) ~ (range), d)
 summary(mod)
 
+# plot regression 
+cc   <- coef(mod)
+pva  <- round(summary(mod)[[4]][8], digits = 5)
 ga2 <- 
   ggplot(d, aes(y= nspe+1, x = (range))) +
   geom_point(fill = pcolor, color = "black", shape = 21, size = psize, alpha = .75) +
@@ -283,7 +286,12 @@ ga2 <-
   geom_smooth(method = lm, color = "black") +
   theme_classic(base_size = 14) +
   labs(y = "Number of insect species",
-       x = "Area of occupancy")
+       x = "Area of occupancy") +
+  annotate(geom = "text", x = 2000, y = 1.5, 
+           label = paste("Y = ", round(cc[1], digits = 3),
+                                                          " + ", round(cc[2], digits = 3), "X",
+                                                          " | p < 0.00001",
+                                                          sep = ""), size = 3)
 ga2
 mod_res <- data.frame(tip_name = names(residuals(mod)), nspe_res = residuals(mod))
 
@@ -322,9 +330,9 @@ ga3 <-
                                                           sep = ""), size = 3)
 
 grange <- ga1 / ga2 / ga3 + plot_annotation(tag_levels = "a") 
-ggsave(grange, filename = "output/extended_data/Extended_Figure_7_controlling_occupancy.pdf",
+ggsave(grange, filename = "output/extended_data_figures/Extended_Figure_7_controlling_occupancy.pdf",
        width = 4.5, height = 10)
-ggsave(grange, filename = "output/extended_data/Extended_Figure_7_controlling_occupancy.png",
+ggsave(grange, filename = "output/extended_data_figures/Extended_Figure_7_controlling_occupancy.png",
        width = 4.5, height = 10)
 
 # 7. Integrating all predictors (PCA)---------------------------------
