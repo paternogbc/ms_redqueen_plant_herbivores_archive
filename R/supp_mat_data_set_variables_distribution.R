@@ -1,5 +1,5 @@
 # Script to check and illustrate the distribution of variables------------------ 
-# Last run: 2020.10.06
+# Last run: 2020.10.09
 
 # Load packages ----------------------------------------------------------------
 library(tidyverse) # CRAN v1.3.0 # CRAN v1.3.0
@@ -100,7 +100,7 @@ gsla <-
   #scale_y_continuous(breaks = seq(0,10,2)) +
   theme_classic(base_size = 12) +
   labs(y= "Frequency",
-       x = expression("Specific leaf area" ~ (mm ~ mg^-1))) +
+       x = expression("Specific leaf area" ~ (mm^2 * mg^-1))) +
   theme(axis.title = element_text(size = 16))
 
 gsla
@@ -169,8 +169,8 @@ gnectar
 gvar <- (gmale + (ghei / gsla )) / (gpoll + gshape + gcolor + gnectar) + 
   plot_annotation(tag_levels = "a") 
 gvar
-ggsave(gvar, filename = "output/extended_data/Extended_Figure_1_plant_variables.pdf", width = 8.5, height = 10)
-ggsave(gvar, filename = "output/extended_data/Extended_Figure_1_plant_variables.png", width = 8.5, height = 10)
+ggsave(gvar, filename = "output/extended_data_figures/Extended_Figure_1_plant_variables.pdf", width = 8.5, height = 10)
+ggsave(gvar, filename = "output/extended_data_figures/Extended_Figure_1_plant_variables.png", width = 8.5, height = 10)
 
 # Insect Variables distribution--------------------------------------------------------
 # Correlation between predictors------------------------------------------------
@@ -185,7 +185,7 @@ dcorr %>%
   select(nspecies, nfamilies, nguilds, divguilds = shan) -> dcorr
 
 # save correlation matrix
-write.csv(x = cor(dcorr), file =  "output/extended_data/Table_correlation_matrix.csv")
+write.csv(x = cor(dcorr), file =  "output/extended_data_figures/Table_correlation_matrix.csv")
 
 # correlation matrix 
 gcor <- 
@@ -265,7 +265,7 @@ gcor <- ggdraw() + draw_image("output/supp/supp_fig_correlation_alternative_herb
 
 ginsout <-  (gnsp + gfam + ggui + gsha) / gcor + plot_annotation(tag_levels = "a")
 
-ggsave(ginsout, filename = "output/extended_data/Extended_Figure_2_insect_variables.pdf",
+ggsave(ginsout, filename = "output/extended_data_figures/Extended_Figure_2_insect_variables.pdf",
        width = 6, height = 10)
-ggsave(ginsout, filename = "output/extended_data/Extended_Figure_2_insect_variables.png",
+ggsave(ginsout, filename = "output/extended_data_figures/Extended_Figure_2_insect_variables.png",
        width = 6, height = 10)
