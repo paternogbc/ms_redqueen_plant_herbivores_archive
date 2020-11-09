@@ -1,4 +1,6 @@
-# Script to run main pgls models
+# Script to run pgls regressionsbetween flower maleness against number 
+# of insect species after controlling for vegetative and reproductive traits.
+# Last run: 2020.10.09
 
 # Load packages -----------------------------------------------------------
 library(tidyverse) # CRAN v1.3.0
@@ -9,6 +11,7 @@ library(broom)     # CRAN v0.7.0
 library(writexl)   # CRAN v1.3
 library(ggtext)    # [github::wilkelab/ggtext] v0.1.0.9000
 library(ggExtra)   # CRAN v0.9
+library(caper)     # CRAN v1.0.1
 
 # source local functions--------------------------------------------------------
 source("R/zzz_functions.R")
@@ -21,9 +24,9 @@ rownames(d) <- d$tip_name
 
 # prepare subsets of data-------------------------------------------------------
 # Vegetative traits
-dveg <- match_dataphy(maleness ~ log2(nspe+1) + sla_imp + height, data = d, phy = t)
-dsla <- match_dataphy(maleness ~ log2(nspe+1) + sla_imp, data = d, phy = t)
-dhei <- match_dataphy(maleness ~ log2(nspe+1) + height, data = d, phy = t)
+dveg  <- match_dataphy(maleness ~ log2(nspe+1) + sla_imp + height, data = d, phy = t)
+dsla  <- match_dataphy(maleness ~ log2(nspe+1) + sla_imp, data = d, phy = t)
+dhei  <- match_dataphy(maleness ~ log2(nspe+1) + height, data = d, phy = t)
 
 # flower traits
 dflo <- match_dataphy(maleness ~ log2(nspe+1) + nectar + color + polli + shape, data = d, phy = t)
@@ -36,17 +39,19 @@ dpol <- match_dataphy(maleness ~ log2(nspe+1) + polli, data = d, phy = t)
 # sla_imp-------------------------------------------------------------------------
 mv1 <- phylolm(maleness ~ log2(nspe+1) + sla_imp, 
                data = dveg$data, phy = dveg$phy, 
-               model = "lambda", boot = 1000)
+               model = "lambda")
 summary(mv1)
-sjPlot::tab_model(mv1)
 writexl::write_xlsx(x = tidy(mv1), path = "output/supp/supp_tab_controlled_pgls_sla.xls")
 
-# sla-----------------------------------------------------------------------
-mv1b <- phylolm(maleness ~ log2(nspe+1) + sla, 
-               data = dsla$data, phy = dsla$phy, 
-               model = "lambda", boot = 1000)
-summary(mv1b) # just to check sla impuatition has changed the result
-writexl::write_xlsx(x = tidy(mv1b), path = "output/supp/supp_tab_controlled_pgls_sla_no_imput.xls")
+# fit with caper
+mv1.2 <- pgls(maleness ~ log2(nspe+1) + sla_imp, 
+              data = comparative.data(t, dsla$data %>% dplyr::select(maleness, tip_name, nspe, sla_imp),
+                                      tip_name, vcv=TRUE, vcv.dim=3),
+              lambda='ML')
+anova(mv1.2)
+# save anova table
+writexl::write_xlsx(x = tidy(anova(mv1.2)), 
+                    path = "output/supp/supp_tab_controlled_pgls_sla_anova.xls")
 
 # height-------------------------------------------------------------------------
 mv2 <- phylolm(maleness ~ log2(nspe+1) + height, 
@@ -55,12 +60,32 @@ mv2 <- phylolm(maleness ~ log2(nspe+1) + height,
 summary(mv2)
 writexl::write_xlsx(x = tidy(mv2), path = "output/supp/supp_tab_controlled_pgls_height.xls")
 
+# fit with caper
+mv2.2 <- pgls(maleness ~ log2(nspe+1) + height, 
+              data = comparative.data(t, dveg$data %>% dplyr::select(maleness, tip_name, nspe, height),
+                                      tip_name, vcv=TRUE, vcv.dim=3),
+              lambda='ML')
+anova(mv2.2)
+# save anova table
+writexl::write_xlsx(x = tidy(anova(mv2.2)), 
+                    path = "output/supp/supp_tab_controlled_pgls_height_anova.xls")
+
 # all vegetative----------------------------------------------------------------
 mv3 <- phylolm(maleness ~ log2(nspe+1) + height + sla_imp, 
                data = dveg$data, phy = dveg$phy, 
                model = "lambda", boot = 1000)
 summary(mv3)
 writexl::write_xlsx(x = tidy(mv3), path = "output/supp/supp_tab_controlled_pgls_all_vegetative.xls")
+
+# fit with caper
+mv3.2 <- pgls(maleness ~ log2(nspe+1) + height + sla_imp, 
+              data = comparative.data(t, dveg$data %>% dplyr::select(maleness, tip_name, nspe, height, sla_imp),
+                                      tip_name, vcv=TRUE, vcv.dim=3),
+              lambda='ML')
+anova(mv3.2)
+# save anova table
+writexl::write_xlsx(x = tidy(anova(mv3.2)), 
+                    path = "output/supp/supp_tab_controlled_pgls_all_vegetative_anova.xls")
 
 # 2. Flower traits------------------------------------------
 # nectar-------------------------------------------------------------------------
@@ -70,12 +95,33 @@ mf1 <- phylolm(maleness ~ log2(nspe+1) + nectar,
 summary(mf1)
 writexl::write_xlsx(x = tidy(mf1), path = "output/supp/supp_tab_controlled_pgls_nectar.xls")
 
+# fit with caper
+mf1.2 <- pgls(maleness ~ log2(nspe+1) + nectar, 
+              data = comparative.data(t, dnec$data %>% dplyr::select(maleness, tip_name, nspe, nectar),
+                                      tip_name, vcv=TRUE, vcv.dim=3),
+              lambda='ML')
+anova(mf1.2)
+# save anova table
+writexl::write_xlsx(x = tidy(anova(mf1.2)), 
+                    path = "output/supp/supp_tab_controlled_pgls_nectar_anova.xls")
+
 # shape-------------------------------------------------------------------------
 mf2 <- phylolm(maleness ~ log2(nspe+1) + shape, 
                data = dsha$data, phy = dsha$phy, 
                model = "lambda", boot = 1000)
 summary(mf2)
 writexl::write_xlsx(x = tidy(mf2), path = "output/supp/supp_tab_controlled_pgls_shape.xls")
+
+# fit with caper
+mf2.2 <- pgls(maleness ~ log2(nspe+1) + shape, 
+              data = comparative.data(t, dsha$data %>% dplyr::select(maleness, tip_name, nspe, shape),
+                                      tip_name, vcv=TRUE, vcv.dim=3),
+              lambda='ML')
+summary(mf2.2)
+
+# save anova table
+writexl::write_xlsx(x = tidy(anova(mf2.2)), 
+                    path = "output/supp/supp_tab_controlled_pgls_shape_anova.xls")
 
 # polli-------------------------------------------------------------------------
 mf3 <- phylolm(maleness ~ log2(nspe+1) + polli, 
@@ -85,12 +131,36 @@ summary(mf3)
 
 writexl::write_xlsx(x = tidy(mf3), path = "output/supp/supp_tab_controlled_pgls_polli.xls")
 
+# fit with caper
+mf3.2 <- pgls(maleness ~ log2(nspe+1) + polli, 
+              data = comparative.data(t, dpol$data %>% dplyr::select(maleness, tip_name, nspe, polli),
+                                      tip_name, vcv=TRUE, vcv.dim=3),
+              lambda='ML')
+summary(mf3.2)
+anova(mf3.2)
+
+# save anova table
+writexl::write_xlsx(x = tidy(anova(mf3.2)), 
+                    path = "output/supp/supp_tab_controlled_pgls_polli_anova.xls")
+
 # color-------------------------------------------------------------------------
 mf4 <- phylolm(maleness ~ log2(nspe+1) + color, 
                data = dcol$data, phy = dcol$phy, 
                model = "lambda", boot = 1000)
 summary(mf4)
 writexl::write_xlsx(x = tidy(mf4), path = "output/supp/supp_tab_controlled_pgls_color.xls")
+
+# fit with caper
+mf4.2 <- pgls(maleness ~ log2(nspe+1) + color, 
+              data = comparative.data(t, dcol$data %>% dplyr::select(maleness, tip_name, nspe, color),
+                                      tip_name, vcv=TRUE, vcv.dim=3),
+              lambda='ML')
+summary(mf4.2)
+anova(mf4.2)
+
+# save anova table
+writexl::write_xlsx(x = tidy(anova(mf4.2)), 
+                    path = "output/supp/supp_tab_controlled_pgls_color_anova.xls")
 
 # all reproductive-------------------------------------------------------------------------
 mf5 <- phylolm(maleness ~ log2(nspe+1) + nectar + shape + polli + color, 
