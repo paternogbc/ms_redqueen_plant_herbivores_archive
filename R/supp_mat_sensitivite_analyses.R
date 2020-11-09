@@ -14,6 +14,7 @@ library(ggExtra)   # CRAN v0.9
 library(ggtext)    # [github::wilkelab/ggtext] v0.1.0.9000 # [github::wilkelab/ggtext] v0.1.0.9000
 library(cowplot)   # CRAN v1.0.0
 library(factoextra)# CRAN v1.0.7
+library(caper)     # CRAN v1.0.1
 
 # source local functions--------------------------------------------------------
 source("R/zzz_functions.R")
@@ -257,6 +258,18 @@ mdist <- phylolm(maleness ~ log2(nspe+1) + range,
                  data = d, phy = t, model = "lambda", boot = 1000)
 summary(mdist)
 write_xlsx(tidy(mdist), path = "output/supp/supp_tab_controlled_pgls_species_range.xls")
+
+# fit with caper
+mdist.2 <- pgls(maleness ~ log2(nspe+1) + range,
+              data = comparative.data(t, d %>% dplyr::select(maleness, tip_name, nspe, range),
+                                      tip_name, vcv=TRUE, vcv.dim=3),
+              lambda='ML')
+anova(mdist.2)
+summary(mdist.2)
+
+# save anova table
+writexl::write_xlsx(x = tidy(anova(mdist.2)), 
+                    path = "output/supp/supp_tab_controlled_pgls_species_range_anova.xls")
 
 # 6.2 Using the residuals-------------------------------------------------------
 # Distribution of area of occupancy
