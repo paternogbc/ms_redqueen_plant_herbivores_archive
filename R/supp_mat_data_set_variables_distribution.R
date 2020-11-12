@@ -1,5 +1,5 @@
 # Script to check and illustrate the distribution of variables------------------ 
-# Last run: 2020.10.09
+# Last run: 2020.10.12
 
 # Load packages ----------------------------------------------------------------
 library(tidyverse) # CRAN v1.3.0 # CRAN v1.3.0
@@ -150,7 +150,7 @@ gcolor <-
   #scale_y_continuous(breaks = seq(0,10,2)) +
   theme_classic(base_size = 12) +
   labs(y= "Frequency",
-       x = "Flower color")+
+       x = "Flower colour")+
   theme(axis.title = element_text(size = 16))
 
 gcolor
