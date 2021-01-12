@@ -1,5 +1,5 @@
 # Script to plot Figure 1: the phylogenetic tree and PGLS regressions
-# Last run: 2020.10.06
+# Last run: 2021.01.12
 
 # Load packages -----------------------------------------------------------
 library(tidyverse)  # CRAN v1.3.0
@@ -215,9 +215,9 @@ pout +
                   offset=38, offset.text = 9, hjust = .5) -> g5
 
 # Figure 1----------------------------------------------------------------------
-reg <- plot_grid(g1, g2, g3, g4, labels = letters[2:5])
+reg <- plot_grid(g1, g2, g3, g4, labels = LETTERS[2:5])
 reg
-out <- plot_grid(g5, reg , ncol = 1, rel_heights = c(.85, 1.15), labels = c("a"))
+out <- plot_grid(g5, reg , ncol = 1, rel_heights = c(.85, 1.15), labels = c("A"))
 out
 
 # save plot

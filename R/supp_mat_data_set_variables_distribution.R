@@ -1,5 +1,5 @@
 # Script to check and illustrate the distribution of variables------------------ 
-# Last run: 2020.10.12
+# Last run: 2021.01.12
 
 # Load packages ----------------------------------------------------------------
 library(tidyverse) # CRAN v1.3.0 # CRAN v1.3.0
@@ -67,12 +67,12 @@ g2
 n_distinct(d$order)
 n_distinct(d$family)
 
-gtaxtree <- rectree + (g1 / g2) + plot_annotation(tag_levels = "a")
+gtaxtree <- rectree + (g1 / g2) + plot_annotation(tag_levels = "A")
 ggsave(plot = gtaxtree, 
-       filename = "output/extended_data/Extended_Figure_3_phylogenetic_tree.pdf",
+       filename = "output/extended_data_figures/Extended_Figure_3_phylogenetic_tree.pdf",
        width = 9.5, height = 11)
 ggsave(plot = gtaxtree, 
-       filename = "output/extended_data/Extended_Figure_3_phylogenetic_tree.png",
+       filename = "output/extended_data_figures/Extended_Figure_3_phylogenetic_tree.png",
        width = 9.5, height = 11)
 
 # Plant Variables distribution--------------------------------------------------------
@@ -167,7 +167,7 @@ gnectar <-
 gnectar
 
 gvar <- (gmale + (ghei / gsla )) / (gpoll + gshape + gcolor + gnectar) + 
-  plot_annotation(tag_levels = "a") 
+  plot_annotation(tag_levels = "A") 
 gvar
 ggsave(gvar, filename = "output/extended_data_figures/Extended_Figure_1_plant_variables.pdf", width = 8.5, height = 10)
 ggsave(gvar, filename = "output/extended_data_figures/Extended_Figure_1_plant_variables.png", width = 8.5, height = 10)
@@ -263,7 +263,7 @@ gins <- gnsp + gfam + ggui + gsha
 # load correaltion matrix
 gcor <- ggdraw() + draw_image("output/supp/supp_fig_correlation_alternative_herbivore_predictors.png")
 
-ginsout <-  (gnsp + gfam + ggui + gsha) / gcor + plot_annotation(tag_levels = "a")
+ginsout <-  (gnsp + gfam + ggui + gsha) / gcor + plot_annotation(tag_levels = "A")
 
 ggsave(ginsout, filename = "output/extended_data_figures/Extended_Figure_2_insect_variables.pdf",
        width = 6, height = 10)

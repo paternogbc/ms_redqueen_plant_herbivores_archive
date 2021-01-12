@@ -1,6 +1,6 @@
 # Script to run sensitivity analysis on the pgls regression between flower 
 # maleness against the number of insect species
-# Last run: 2020.10.06
+# Last run: 2021.01.12
 
 # Load packages -----------------------------------------------------------
 library(tidyverse) # CRAN v1.3.0
@@ -70,10 +70,10 @@ gs2 <- ggplot(samp$sensi.estimates, aes(y = pval.estimate , x = as.factor(n.perc
        y = "P-value")
 gs2  
 
-gs <- gs1 + gs2 + plot_annotation(tag_levels = "a")
+gs <- gs1 + gs2 + plot_annotation(tag_levels = "A")
 ggsave(gs, filename = "output/supp/supp_fig_sensi_sampling_raw_points.png", height =5, width = 11)
-ggsave(gs, filename = "output/extended_data/Extended_Figure_4_sampling_uncertainty.pdf", height =5, width = 11)
-ggsave(gs, filename = "output/extended_data/Extended_Figure_4_sampling_uncertainty.png", height =5, width = 11)
+ggsave(gs, filename = "output/extended_data_figures/Extended_Figure_4_sampling_uncertainty.pdf", height =5, width = 11)
+ggsave(gs, filename = "output/extended_data_figures/Extended_Figure_4_sampling_uncertainty.png", height =5, width = 11)
 
 # save table
 write_xlsx(round(samp$sign.analysis, digits = 6), path = "output/supp/supp_tab_sensi_sampling.xls")
@@ -155,13 +155,13 @@ ggsave(guncert, filename = "output/supp/supp_fig_phylogenetic_tree_uncertainty.p
 
 guncert <- ggdraw() + draw_image("output/supp/supp_fig_phylogenetic_tree_uncertainty.png")
 
-gsensitree <- plot_grid(guncert, gtreea, gtreec, ncol = 1, labels = c("a", "b", "c"), 
+gsensitree <- plot_grid(guncert, gtreea, gtreec, ncol = 1, labels = c("A", "B", "C"), 
                                  label_fontface = "plain", label_size = 18)
 guncert / gtreea / gtreec
 
-ggsave(plot = gsensitree, filename = "output/extended_data/Extended_Figure_5_tree_uncertainty.pdf", 
+ggsave(plot = gsensitree, filename = "output/extended_data_figures/Extended_Figure_5_tree_uncertainty.pdf", 
        height = 11, width = 5)
-ggsave(plot = gsensitree, filename = "output/extended_data/Extended_Figure_5_tree_uncertainty.png", 
+ggsave(plot = gsensitree, filename = "output/extended_data_figures/Extended_Figure_5_tree_uncertainty.png", 
        height = 11, width = 5)
 
 # 4. Feeding guilds-------------------------------------------------------------
@@ -248,9 +248,9 @@ g2 <-
                                                           " | p = ", pva,
                                                           sep = ""), size = 3)
 g2
-gtaxa <- g2 + g1 + plot_annotation(tag_levels = "a")
-ggsave(gtaxa, filename = 'output/extended_data/Extended_Figure_6_alternative_insect_groups.pdf', width = 9, height = 5)
-ggsave(gtaxa, filename = 'output/extended_data/Extended_Figure_6_alternative_insect_groups.png', width = 9, height = 5)
+gtaxa <- g2 + g1 + plot_annotation(tag_levels = "A")
+ggsave(gtaxa, filename = 'output/extended_data_figures/Extended_Figure_6_alternative_insect_groups.pdf', width = 9, height = 5)
+ggsave(gtaxa, filename = 'output/extended_data_figures/Extended_Figure_6_alternative_insect_groups.png', width = 9, height = 5)
 
 # 6. Controlling for species distribution range---------------------------------
 # 6.1 Using distribution as a covariate-----------------------------------------
@@ -342,7 +342,7 @@ ga3 <-
                                                           " | p = ", pva,
                                                           sep = ""), size = 3)
 
-grange <- ga1 / ga2 / ga3 + plot_annotation(tag_levels = "a") 
+grange <- ga1 / ga2 / ga3 + plot_annotation(tag_levels = "A") 
 ggsave(grange, filename = "output/extended_data_figures/Extended_Figure_7_controlling_occupancy.pdf",
        width = 4.5, height = 10)
 ggsave(grange, filename = "output/extended_data_figures/Extended_Figure_7_controlling_occupancy.png",
