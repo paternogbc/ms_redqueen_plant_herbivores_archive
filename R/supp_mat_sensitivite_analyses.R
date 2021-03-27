@@ -1,6 +1,6 @@
 # Script to run sensitivity analysis on the pgls regression between flower 
 # maleness against the number of insect species
-# Last run: 2021.01.12
+# Last run: 2021.03.27
 
 # Load packages -----------------------------------------------------------
 library(tidyverse) # CRAN v1.3.0
@@ -52,8 +52,8 @@ saveRDS(object = samp, file = "output/temp/sensitivity_sampling_uncertainty_esti
 samp <- readRDS("output/temp/sensitivity_sampling_uncertainty_estimates.RDs")
 gs1 <- ggplot(samp$sensi.estimates, aes(y = estimate, x = as.factor(n.percent))) +
   geom_jitter(width = .1, color = "gray") +
-  geom_boxplot(fill = "orange", alpha = .55, outlier.colour = NA) +
-  geom_hline(yintercept = samp$full.model.estimates$coef[[2]], lty = 1, color = 'orange') +
+  geom_boxplot(fill = "white", alpha = .55, outlier.colour = NA) +
+  geom_hline(yintercept = samp$full.model.estimates$coef[[2]], lty = 2, color = 'red') +
   theme_classic(base_size = 18) +
   labs(x = "Percentage of species removed (%)",
        y = "Estimated slope")
@@ -62,7 +62,7 @@ gs1
 # distribution of p.values
 gs2 <- ggplot(samp$sensi.estimates, aes(y = pval.estimate , x = as.factor(n.percent))) +
   geom_jitter(width = .1, color = "gray") +
-  geom_boxplot(fill = "tomato", alpha = .55, outlier.colour = NA) +
+  geom_boxplot(fill = "white", alpha = .55, outlier.colour = NA) +
   geom_hline(yintercept = 0.05, lty = 2, color = "red") +
   scale_y_log10(breaks = c(0.000001,0.000001,0.00001, 0.0001, 0.001, 0.01, 0.1, 1)) +
   theme_classic(base_size = 18) +
@@ -70,7 +70,7 @@ gs2 <- ggplot(samp$sensi.estimates, aes(y = pval.estimate , x = as.factor(n.perc
        y = "P-value")
 gs2  
 
-gs <- gs1 + gs2 + plot_annotation(tag_levels = "A")
+gs <- gs1 + gs2 + plot_annotation(tag_levels = "a")
 ggsave(gs, filename = "output/supp/supp_fig_sensi_sampling_raw_points.png", height =5, width = 11)
 ggsave(gs, filename = "output/extended_data_figures/Extended_Figure_4_sampling_uncertainty.pdf", height =5, width = 11)
 ggsave(gs, filename = "output/extended_data_figures/Extended_Figure_4_sampling_uncertainty.png", height =5, width = 11)
@@ -155,7 +155,7 @@ ggsave(guncert, filename = "output/supp/supp_fig_phylogenetic_tree_uncertainty.p
 
 guncert <- ggdraw() + draw_image("output/supp/supp_fig_phylogenetic_tree_uncertainty.png")
 
-gsensitree <- plot_grid(guncert, gtreea, gtreec, ncol = 1, labels = c("A", "B", "C"), 
+gsensitree <- plot_grid(guncert, gtreea, gtreec, ncol = 1, labels = c("a", "b", "c"), 
                                  label_fontface = "plain", label_size = 18)
 guncert / gtreea / gtreec
 
@@ -248,7 +248,7 @@ g2 <-
                                                           " | p = ", pva,
                                                           sep = ""), size = 3)
 g2
-gtaxa <- g2 + g1 + plot_annotation(tag_levels = "A")
+gtaxa <- g2 + g1 + plot_annotation(tag_levels = "a")
 ggsave(gtaxa, filename = 'output/extended_data_figures/Extended_Figure_6_alternative_insect_groups.pdf', width = 9, height = 5)
 ggsave(gtaxa, filename = 'output/extended_data_figures/Extended_Figure_6_alternative_insect_groups.png', width = 9, height = 5)
 
@@ -342,7 +342,7 @@ ga3 <-
                                                           " | p = ", pva,
                                                           sep = ""), size = 3)
 
-grange <- ga1 / ga2 / ga3 + plot_annotation(tag_levels = "A") 
+grange <- ga1 / ga2 / ga3 + plot_annotation(tag_levels = "a") 
 ggsave(grange, filename = "output/extended_data_figures/Extended_Figure_7_controlling_occupancy.pdf",
        width = 4.5, height = 10)
 ggsave(grange, filename = "output/extended_data_figures/Extended_Figure_7_controlling_occupancy.png",
